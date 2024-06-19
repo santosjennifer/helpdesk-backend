@@ -1,0 +1,12 @@
+spring:
+   datasource:
+      url: jdbc:mysql://localhost:3306/helpdesk
+      username: root
+      password: postgres
+   jpa:
+      hibernate:
+         ddl-auto: none
+      show-sql: true
+      properties:
+         hibernate:
+            format_sql: true
