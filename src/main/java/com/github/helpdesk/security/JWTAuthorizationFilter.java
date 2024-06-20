@@ -1,4 +1,4 @@
-package com.github.helpdesk.sercurity;
+package com.github.helpdesk.security;
 
 import java.io.IOException;
 
@@ -50,7 +50,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			response.setContentType("application/json");
 			response.getWriter()
 					.write(new ObjectMapper().writeValueAsString(new StandardError(System.currentTimeMillis(),
-							HttpStatus.FORBIDDEN.value(), "Token Expirado", e.getMessage(), request.getRequestURI())));
+							HttpStatus.FORBIDDEN.value(), e.getMessage(), "Token Expirado", request.getRequestURI())));
 		}
 	}
 

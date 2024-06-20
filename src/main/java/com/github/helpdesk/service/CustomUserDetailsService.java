@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.helpdesk.domain.Pessoa;
 import com.github.helpdesk.repository.PessoaRepository;
-import com.github.helpdesk.sercurity.CustomUserDetails;
+import com.github.helpdesk.security.CustomUserDetails;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

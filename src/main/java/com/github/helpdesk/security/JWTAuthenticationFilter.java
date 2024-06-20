@@ -1,4 +1,4 @@
-package com.github.helpdesk.sercurity;
+package com.github.helpdesk.security;
 
 import java.io.IOException;
 import java.util.ArrayList;

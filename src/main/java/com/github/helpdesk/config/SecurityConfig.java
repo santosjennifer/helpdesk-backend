@@ -17,11 +17,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.github.helpdesk.sercurity.JWTAuthenticationFilter;
-import com.github.helpdesk.sercurity.JWTAuthorizationFilter;
-import com.github.helpdesk.sercurity.JWTUtil;
+import com.github.helpdesk.security.JWTAuthenticationFilter;
+import com.github.helpdesk.security.JWTAuthorizationFilter;
+import com.github.helpdesk.security.JWTUtil;
+import com.github.helpdesk.security.exception.CustomAccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity()
@@ -31,11 +33,14 @@ public class SecurityConfig {
     private final Environment env;
     private final JWTUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SecurityConfig(Environment env, JWTUtil jwtUtil, UserDetailsService userDetailsService) {
+    public SecurityConfig(Environment env, JWTUtil jwtUtil, UserDetailsService userDetailsService, 
+    		CustomAccessDeniedHandler customAccessDeniedHandler) {
         this.env = env;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
     @Bean
@@ -51,7 +56,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedHandler(customAccessDeniedHandler));
 
         if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
             http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
@@ -76,6 +82,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+    
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
     }
 	
 }

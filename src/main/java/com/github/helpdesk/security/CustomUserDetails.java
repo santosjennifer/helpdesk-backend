@@ -1,4 +1,4 @@
-package com.github.helpdesk.sercurity;
+package com.github.helpdesk.security;
 
 import java.util.Collection;
 import java.util.Set;
