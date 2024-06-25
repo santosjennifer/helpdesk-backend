@@ -31,7 +31,7 @@ public class JWTUtil {
                 .add(extraClaims)
                 .subject(userName)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + (5 * 60 * 1000)))
+                .expiration(new Date(System.currentTimeMillis() + (15 * 60 * 1000)))
                 .and()
                 .signWith(getSignInKey())
                 .compact();

@@ -11,6 +11,7 @@ import com.github.helpdesk.service.exception.DataIntegrityViolationException;
 import com.github.helpdesk.service.exception.ObjectNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -43,4 +44,18 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
 	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<StandardError> constraintViolationException(ConstraintViolationException ex,
+			HttpServletRequest request) {
+		String errorMessage = ex.getConstraintViolations()
+                .stream()
+                .findFirst()
+                .map(violation -> violation.getMessage())
+                .orElse("Erro de validação");
+                
+		StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"Constraint violation", errorMessage, request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+
 }

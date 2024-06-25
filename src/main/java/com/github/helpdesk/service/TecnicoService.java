@@ -31,7 +31,8 @@ public class TecnicoService {
 	
 	public Tecnico findById(Integer id) {
 		Optional<Tecnico> tecnico = repository.findById(id);
-		return tecnico.orElseThrow(() -> new ObjectNotFoundException("Técnico não encontrado. ID: " + id));
+		return tecnico.orElseThrow(() 
+				-> new ObjectNotFoundException("Técnico não encontrado. ID: " + id));
 	}
 
 	public List<Tecnico> findAll() {
@@ -49,6 +50,11 @@ public class TecnicoService {
 	public Tecnico update(Integer id, @Valid TecnicoDto dto) {
 		dto.setId(id);
 		Tecnico tecnico = findById(id);
+		
+		if (!dto.getSenha().equals(tecnico.getSenha())) {
+			dto.setSenha(encoder.encode(dto.getSenha()));
+		}
+		
 		validaPorCpfEEmail(dto);
 		tecnico = new Tecnico(dto);
 		return repository.save(tecnico);
@@ -57,7 +63,7 @@ public class TecnicoService {
 	public void delete(Integer id) {
 		Tecnico tecnico = findById(id);
 		if (tecnico.getChamados().size() > 0) {
-			throw new DataIntegrityViolationException("Técnico possui ordens de serviço e não pode ser excluido.");
+			throw new DataIntegrityViolationException("Técnico possui ordem de serviço e não pode ser excluido.");
 		}
 		repository.deleteById(id);
 	}

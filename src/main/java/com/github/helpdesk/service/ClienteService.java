@@ -30,8 +30,9 @@ public class ClienteService {
 	}
 	
 	public Cliente findById(Integer id) {
-		Optional<Cliente> Cliente = repository.findById(id);
-		return Cliente.orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado. ID: " + id));
+		Optional<Cliente> cliente = repository.findById(id);
+		return cliente.orElseThrow(() 
+				-> new ObjectNotFoundException("Cliente não encontrado. ID: " + id));
 	}
 
 	public List<Cliente> findAll() {
@@ -42,22 +43,27 @@ public class ClienteService {
 		dto.setId(null);
 		dto.setSenha(encoder.encode(dto.getSenha()));
 		validaPorCpfEEmail(dto);
-		Cliente Cliente = new Cliente(dto);
-		return repository.save(Cliente);
+		Cliente cliente = new Cliente(dto);
+		return repository.save(cliente);
 	}
 	
 	public Cliente update(Integer id, @Valid ClienteDto dto) {
 		dto.setId(id);
-		Cliente Cliente = findById(id);
+		Cliente cliente = findById(id);
+		
+		if (!dto.getSenha().equals(cliente.getSenha())) {
+			dto.setSenha(encoder.encode(dto.getSenha()));
+		}
+		
 		validaPorCpfEEmail(dto);
-		Cliente = new Cliente(dto);
-		return repository.save(Cliente);
+		cliente = new Cliente(dto);
+		return repository.save(cliente);
 	}
 	
 	public void delete(Integer id) {
-		Cliente Cliente = findById(id);
-		if (Cliente.getChamados().size() > 0) {
-			throw new DataIntegrityViolationException("Cliente possui ordens de serviço e não pode ser excluido.");
+		Cliente cliente = findById(id);
+		if (cliente.getChamados().size() > 0) {
+			throw new DataIntegrityViolationException("Cliente possui ordem de serviço e não pode ser excluido.");
 		}
 		repository.deleteById(id);
 	}

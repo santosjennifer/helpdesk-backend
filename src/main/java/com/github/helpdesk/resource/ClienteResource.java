@@ -34,28 +34,29 @@ public class ClienteResource {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ClienteDto> findById(@PathVariable Integer id) {
-		Cliente Cliente = service.findById(id);
-		return ResponseEntity.ok(new ClienteDto(Cliente));
+		Cliente cliente = service.findById(id);
+		return ResponseEntity.ok(new ClienteDto(cliente));
 	}
 
 	@GetMapping
 	public ResponseEntity<List<ClienteDto>> findAll() {
 		List<Cliente> list = service.findAll();
-		List<ClienteDto> listDto = list.stream().map(Cliente -> new ClienteDto(Cliente)).collect(Collectors.toList());
+		List<ClienteDto> listDto = list.stream().map(Cliente 
+				-> new ClienteDto(Cliente)).collect(Collectors.toList());
 		return ResponseEntity.ok(listDto);
 	}
 
 	@PostMapping
 	public ResponseEntity<ClienteDto> create(@Valid @RequestBody ClienteDto dto) {
-		Cliente Cliente = service.create(dto);
-		ClienteDto ClienteToDto = new ClienteDto(Cliente);
-		return new ResponseEntity<>(ClienteToDto, HttpStatus.CREATED);
+		Cliente cliente = service.create(dto);
+		ClienteDto clienteToDto = new ClienteDto(cliente);
+		return new ResponseEntity<>(clienteToDto, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ClienteDto> update(@PathVariable Integer id, @Valid @RequestBody ClienteDto dto) {
-		Cliente Cliente = service.update(id, dto);
-		return ResponseEntity.ok().body(new ClienteDto(Cliente));
+		Cliente cliente = service.update(id, dto);
+		return ResponseEntity.ok().body(new ClienteDto(cliente));
 	}
 
 	@DeleteMapping("/{id}")

@@ -40,7 +40,8 @@ public class ChamadoResource {
 	@GetMapping
 	public ResponseEntity<List<ChamadoDto>> findAll() {
 		List<Chamado> list = service.findAll();
-		List<ChamadoDto> listDto = list.stream().map(chamado -> new ChamadoDto(chamado)).collect(Collectors.toList());
+		List<ChamadoDto> listDto = list.stream().map(chamado 
+				-> new ChamadoDto(chamado)).collect(Collectors.toList());
 		return ResponseEntity.ok(listDto);
 	}
 

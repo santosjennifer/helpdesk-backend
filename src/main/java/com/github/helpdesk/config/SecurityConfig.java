@@ -29,64 +29,68 @@ import com.github.helpdesk.security.exception.CustomAccessDeniedHandler;
 @EnableWebSecurity()
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-	
-    private final Environment env;
-    private final JWTUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SecurityConfig(Environment env, JWTUtil jwtUtil, UserDetailsService userDetailsService, 
-    		CustomAccessDeniedHandler customAccessDeniedHandler) {
-        this.env = env;
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
-        this.customAccessDeniedHandler = customAccessDeniedHandler;
-    }
+	private final Environment env;
+	private final JWTUtil jwtUtil;
+	private final UserDetailsService userDetailsService;
+	private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
+	public SecurityConfig(Environment env, JWTUtil jwtUtil, UserDetailsService userDetailsService,
+			CustomAccessDeniedHandler customAccessDeniedHandler) {
+		this.env = env;
+		this.jwtUtil = jwtUtil;
+		this.userDetailsService = userDetailsService;
+		this.customAccessDeniedHandler = customAccessDeniedHandler;
+	}
 
-        JWTAuthorizationFilter jwtAuthorizationFilter = new JWTAuthorizationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil, userDetailsService);
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter(
+				authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil);
+		jwtAuthenticationFilter.setFilterProcessesUrl("/login");
 
-        http.csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/h2-console/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                .anyRequest().authenticated())
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedHandler(customAccessDeniedHandler));
+		JWTAuthorizationFilter jwtAuthorizationFilter = new JWTAuthorizationFilter(
+				authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil,
+				userDetailsService);
 
-        if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
-            http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
-        }
+		http.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests(
+						auth -> auth.requestMatchers("/h2-console/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+								.anyRequest().authenticated())
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.exceptionHandling(
+						exceptionHandling -> exceptionHandling.accessDeniedHandler(customAccessDeniedHandler));
 
-        return http.build();
-    }
+		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+			http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
+		}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+		return http.build();
+	}
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-    
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
-	
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService);
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		return authenticationProvider;
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		return config.getAuthenticationManager();
+	}
+
+	@Bean
+	public AccessDeniedHandler accessDeniedHandler() {
+		return new CustomAccessDeniedHandler();
+	}
+
 }
