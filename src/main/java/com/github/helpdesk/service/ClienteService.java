@@ -3,7 +3,7 @@ package com.github.helpdesk.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.github.helpdesk.domain.Cliente;
@@ -21,9 +21,9 @@ public class ClienteService {
 
 	private ClienteRepository repository;
 	private PessoaRepository pessoaRepository;
-	private BCryptPasswordEncoder encoder;
+	private PasswordEncoder encoder;
 	
-	public ClienteService(ClienteRepository repository, PessoaRepository pessoaRepository, BCryptPasswordEncoder encoder) {
+	public ClienteService(ClienteRepository repository, PessoaRepository pessoaRepository, PasswordEncoder encoder) {
 		this.repository = repository;
 		this.pessoaRepository = pessoaRepository;
 		this.encoder = encoder;

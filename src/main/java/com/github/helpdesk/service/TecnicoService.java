@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.github.helpdesk.domain.Pessoa;
@@ -21,9 +22,9 @@ public class TecnicoService {
 
 	private TecnicoRepository repository;
 	private PessoaRepository pessoaRepository;
-	private BCryptPasswordEncoder encoder;
+	private PasswordEncoder encoder;
 	
-	public TecnicoService(TecnicoRepository repository, PessoaRepository pessoaRepository, BCryptPasswordEncoder encoder) {
+	public TecnicoService(TecnicoRepository repository, PessoaRepository pessoaRepository, PasswordEncoder encoder) {
 		this.repository = repository;
 		this.pessoaRepository = pessoaRepository;
 		this.encoder = encoder;
