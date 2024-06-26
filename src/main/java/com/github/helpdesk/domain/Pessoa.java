@@ -30,7 +30,7 @@ public abstract class Pessoa implements Serializable {
 	protected Integer id;
 	protected String nome;
 	
-	@CPF(message = "O cpf deve ser válido.")
+	@CPF(message = "O CPF deve ser válido")
 	@Column(unique = true)
 	protected String cpf;
 	

@@ -25,7 +25,7 @@ public class ChamadoDto implements Serializable {
 	@NotNull(message = "O status deve ser informado")
 	private Integer status;
 	
-	@NotNull(message = "O titulo deve ser informado")
+	@NotNull(message = "O título deve ser informado")
 	private String titulo;
 	
 	@NotNull(message = "O campo observações deve ser informado")

@@ -20,7 +20,7 @@ public class ClienteDto implements Serializable {
 	@NotNull(message = "O nome deve ser informado")
 	protected String nome;
 	
-	@NotNull(message = "O cpf deve ser informado")
+	@NotNull(message = "O CPF deve ser informado")
 	protected String cpf;
 	
 	@NotNull(message = "O e-mail deve ser informado")

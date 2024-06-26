@@ -3,7 +3,6 @@ package com.github.helpdesk.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +63,7 @@ public class TecnicoService {
 	public void delete(Integer id) {
 		Tecnico tecnico = findById(id);
 		if (tecnico.getChamados().size() > 0) {
-			throw new DataIntegrityViolationException("Técnico possui ordem de serviço e não pode ser excluido.");
+			throw new DataIntegrityViolationException("Técnico possui ordem de serviço e não pode ser excluido");
 		}
 		repository.deleteById(id);
 	}
@@ -72,12 +71,12 @@ public class TecnicoService {
 	private void validaPorCpfEEmail(TecnicoDto dto) {
 		Optional<Pessoa> pessoa = pessoaRepository.findByCpf(dto.getCpf());
 		if (pessoa.isPresent() && pessoa.get().getId() != dto.getId()) {
-			throw new DataIntegrityViolationException("CPF já cadastrado.");
+			throw new DataIntegrityViolationException("CPF já cadastrado");
 		}
 		
 		pessoa = pessoaRepository.findByEmail(dto.getEmail());
 		if (pessoa.isPresent() && pessoa.get().getId() != dto.getId()) {
-			throw new DataIntegrityViolationException("E-mail já cadastrado.");
+			throw new DataIntegrityViolationException("E-mail já cadastrado");
 		}
 	}
 	

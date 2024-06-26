@@ -63,7 +63,7 @@ public class ClienteService {
 	public void delete(Integer id) {
 		Cliente cliente = findById(id);
 		if (cliente.getChamados().size() > 0) {
-			throw new DataIntegrityViolationException("Cliente possui ordem de serviço e não pode ser excluido.");
+			throw new DataIntegrityViolationException("Cliente possui ordem de serviço e não pode ser excluido");
 		}
 		repository.deleteById(id);
 	}
@@ -71,12 +71,12 @@ public class ClienteService {
 	private void validaPorCpfEEmail(ClienteDto dto) {
 		Optional<Pessoa> pessoa = pessoaRepository.findByCpf(dto.getCpf());
 		if (pessoa.isPresent() && pessoa.get().getId() != dto.getId()) {
-			throw new DataIntegrityViolationException("CPF já cadastrado.");
+			throw new DataIntegrityViolationException("CPF já cadastrado");
 		}
 		
 		pessoa = pessoaRepository.findByEmail(dto.getEmail());
 		if (pessoa.isPresent() && pessoa.get().getId() != dto.getId()) {
-			throw new DataIntegrityViolationException("E-mail já cadastrado.");
+			throw new DataIntegrityViolationException("E-mail já cadastrado");
 		}
 	}
 	
