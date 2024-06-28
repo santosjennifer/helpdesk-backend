@@ -12,9 +12,9 @@ O sistema está rodando na nuvem sendo o back-end no Render e front-end na Verce
 
 Link para acesso na [Vercel](https://helpdesk-six-lemon.vercel.app/).
 
-Dominio do backend no [Render](https://helpdesk-s2sy.onrender.com).
+Domínio do backend no [Render](https://helpdesk-s2sy.onrender.com).
 
-O código fonte do projeto front-end [helpdesk-frontend](https://github.com/santosjennifer/helpdesk-frontend).
+Código fonte do projeto front-end [helpdesk-frontend](https://github.com/santosjennifer/helpdesk-frontend).
 
 ### Tecnologia:
 - Java 21
