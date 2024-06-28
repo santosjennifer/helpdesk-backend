@@ -29,7 +29,7 @@ Código fonte do projeto front-end [helpdesk-frontend](https://github.com/santos
 
 Clone o repositório:
 ```
-git clone git@github.com:santosjennifer/helpdesk-backendl.git
+git clone git@github.com:santosjennifer/helpdesk-backend.git
 ```
 
 Na raiz do projeto, execute o comando:
